@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerenciar Meus Links</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Meus Links (ID: {{ user_id }})</h1>
+        
+        <form action="/links/adicionar" method="post">
+            <input type="hidden" name="user_id" value="{{ user_id }}">
+            <input type="text" name="nome" placeholder="Nome do Link (ex: Instagram)" required>
+            <input type="url" name="url" placeholder="https://..." required>
+            <button type="submit" style="background-color: green;">Adicionar Link</button>
+        </form>
+
+        <hr>
+
+        <ul>
+            {% for link in links %}
+            <li>
+                <a href="{{ link.url }}" target="_blank">{{ link.nome }}</a>
+                <form action="/links/deletar/{{ link.id }}" method="post" style="display:inline;">
+                    <input type="hidden" name="user_id" value="{{ user_id }}">
+                    <button type="submit" style="background-color: red; padding: 2px 5px;">X</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <a href="/user/{{ username }}">Ver meu perfil público</a>
+    </div>
+</body>
+</html>

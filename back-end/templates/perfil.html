@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bio Link</title>
+    <link rel="icon" type="image/x-icon" href="Assets/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <header class="profile">
+            <img src="{{ url_for('static', path='Assets/perfil.jpeg')}}" alt="Foto de perfil" class="avatar">
+            <h1>{{usuario}}</h1>
+            <p>Desenvolvendo o futuro, uma linha por vez.</p>
+        </header>
+
+        <main class="links-container">
+            {% for link in links %}
+            <a href="{{ link.url }}" class="link-card" target="_blank">
+                {% if 'instagram' in link.url.lower() %}
+                    <i class="fa-brands fa-instagram"></i>
+                {% elif 'github' in link.url.lower() %}
+                    <i class="fa-brands fa-github"></i>
+                {% elif 'spotify' in link.url.lower() %}
+                    <i class="fa-brands fa-spotify"></i>
+                {% elif 'linkedin' in link.url.lower() %}
+                    <i class="fa-brands fa-linkedin"></i>
+                {% else %}
+                    <i class="fa-solid fa-link"></i> 
+                {% endif %}
+                {{ link.nome }}
+            </a>
+            {% endfor %}
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
