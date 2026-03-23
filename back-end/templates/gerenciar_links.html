@@ -6,30 +6,31 @@
 </head>
 <body>
     <div class="container">
-        <h1>Meus Links (ID: {{ user_id }})</h1>
+        <h1 style="margin-bottom: 8px;">Meus Links</h1>
+        <p style="color:#888; margin-bottom: 24px;">@{{ username }}</p>
         
         <form action="/links/adicionar" method="post">
             <input type="hidden" name="user_id" value="{{ user_id }}">
             <input type="text" name="nome" placeholder="Nome do Link (ex: Instagram)" required>
             <input type="url" name="url" placeholder="https://..." required>
-            <button type="submit" style="background-color: green;">Adicionar Link</button>
+            <button type="submit">Adicionar Link</button>
         </form>
 
-        <hr>
+        <hr style="border-color: #222; margin: 24px 0;">
 
-        <ul>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
             {% for link in links %}
-            <li>
-                <a href="{{ link.url }}" target="_blank">{{ link.nome }}</a>
-                <form action="/links/deletar/{{ link.id }}" method="post" style="display:inline;">
+            <div style="display: flex; align-items: center; justify-content: space-between; background: #1a1a1a; padding: 12px 16px; border-radius: 8px; border: 1px solid #333;">
+                <a href="{{link.url}}" traget="_blank" style="color: white; text-decoration: none;">{{ link.nome}}</a>
+                <form action="/links/deletar/{{ link.id }}" method="post">
                     <input type="hidden" name="user_id" value="{{ user_id }}">
-                    <button type="submit" style="background-color: red; padding: 2px 5px;">X</button>
+                    <button type="submit" style="background: transparent; color: #888; border: 1px solid #333; width: auto; padding: 6px 12px; font-weight: normal;">Remover</button>
                 </form>
-            </li>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
         
-        <a href="/user/{{ username }}">Ver meu perfil público</a>
+        <a href="/user/{{ username }}" style="display: block; margin-top: 24px; color: #888;">Ver perfil público</a>
     </div>
 </body>
 </html>

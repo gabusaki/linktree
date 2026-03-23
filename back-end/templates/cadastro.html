@@ -2,18 +2,18 @@
 <html>
     <head>
         <title>
-            Login-Meu Perfil
+            Cadastro
         </title>
         <link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
-        <div class="container">
-            <h1>Entrar</h1>
-            <form action="/auth/login" method="post">
+        <div class = "container">
+            <h1>Crie uma conta</h1>
+            <form action="/auth/cadastro" method="post">
                 <input type="text" name="username" placeholder="Usuário" required>
                 <input type="password" name="password" placeholder="Senha" required>
-                <button type="submit">Entrar</button>
-                <p style="margin-top: 16px; color: #888;">Não tem conta? <a href="/cadastro" style="color: white;">Cadastre-se</a></p>
+                <button type="submit">Cadastrar</button>
+                <p style="margin-top: 16px; color: #888;">Já tem conta? <a href="/login" style="color: white;">Entrar</a></p>
             </form>
         </div>
     </body>

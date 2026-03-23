@@ -8,11 +8,15 @@
     <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-<body>
-
+    <body style="
+    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/static/Assets/backgorund.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+">
     <div class="container">
         <header class="profile">
-            <img src="{{ url_for('static', path='Assets/perfil.jpeg')}}" alt="Foto de perfil" class="avatar">
+            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ usuario }}" alt="Foto de perfil" class="avatar">
             <h1>{{usuario}}</h1>
             <p>Desenvolvendo o futuro, uma linha por vez.</p>
         </header>

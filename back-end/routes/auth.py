@@ -93,3 +93,25 @@ def carregar_perfil(request: Request, username_digitado: str):
         "usuario": user.username,
         "links": links_do_usuario
     })
+
+@router.post("/auth/cadastro")
+def cadastrar_perfil(
+    username: str = Form(...),
+    password: str = Form(...)
+):
+    db = SessionLocal()
+    usuario_existente = db.query(Usuario).filter(Usuario.username == username).first()
+    if usuario_existente:
+        db.close()
+        return{"erro": "Este nome de usuário já existe. Escolha outro!"}
+    senha_criptografada = gerar_senha_hash(password)
+    novo_user = Usuario(username=username, hashed_password=senha_criptografada)
+    db.add(novo_user)
+    db.commit()
+    db.refresh(novo_user)
+    db.close()
+    return RedirectResponse(url=f"/user/{username}", status_code=303)
+
+@router.get("/cadastro", response_class=HTMLResponse)
+def tela_cadastro(request: Request):
+    return templates.TemplateResponse("cadastro.html", {"request": request})
