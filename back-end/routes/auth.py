@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Form, Request
+from fastapi import APIRouter, Form, Request, UploadFile, File
 from fastapi.responses import RedirectResponse, HTMLResponse
 from database import SessionLocal
 from passlib.context import CryptContext
 from pydantic import BaseModel, constr
 from models import Link, Usuario
 from fastapi.templating import Jinja2Templates
+import cloudinary
 import os
 
 base_dir = os.path.dirname(os.path.realpath(__file__))
@@ -80,7 +81,7 @@ def processar_login(request: Request, username: str = Form(...), password: str =
     request.session["user_id"] = usuario.id
     request.session["username"] = usuario.username
     db.close()
-    return RedirectResponse(url=f"/gerenciar/{usuario.id}", status_code=303)
+    return RedirectResponse(url=f"/dashboard", status_code=303)
 
 @router.get("/user/{username_digitado}", response_class=HTMLResponse)
 def carregar_perfil(request: Request, username_digitado: str):
@@ -93,11 +94,14 @@ def carregar_perfil(request: Request, username_digitado: str):
     db.close()
     return templates.TemplateResponse(request,"perfil.html", {
         "usuario": user.username,
-        "links": links_do_usuario
+        "links": links_do_usuario,
+        "bio": user.bio,
+        "foto_url": user.foto_url,
+        "fundo_url": user.fundo_url
     })
 
 @router.post("/auth/cadastro")
-def cadastrar_perfil(
+def cadastrar_perfil(request: Request,
     username: str = Form(...),
     password: str = Form(...)
 ):
@@ -111,8 +115,10 @@ def cadastrar_perfil(
     db.add(novo_user)
     db.commit()
     db.refresh(novo_user)
+    request.session["user_id"] = novo_user.id
+    request.session["username"] = novo_user.username
     db.close()
-    return RedirectResponse(url=f"/gerenciar/{novo_user.id}", status_code=303)
+    return RedirectResponse(url=f"/dashboard", status_code=303)
 
 @router.get("/cadastro", response_class=HTMLResponse)
 def tela_cadastro(request: Request):
@@ -122,3 +128,46 @@ def tela_cadastro(request: Request):
 def logout(request: Request):
     request.session.clear()
     return RedirectResponse(url="/login", status_code=303)
+
+@router.get("/dashboard", response_class=HTMLResponse)
+def tela_dashboard(request: Request):
+    user_id = request.session.get("user_id")
+    username = request.session.get("username")
+    return templates.TemplateResponse(request,"dashboard.html", {
+        "user_id": user_id,
+        "username": username
+    })
+
+@router.get("/editar-perfil", response_class=HTMLResponse)
+def tela_editar_perfil(request: Request):
+    user_id = request.session.get("user_id")
+    username = request.session.get("username")
+    return templates.TemplateResponse(request,"editar_perfil.html", {
+        "user_id": user_id,
+        "username": username
+    })
+
+@router.post("/auth/editar_perfil")
+def editar_perfil(request: Request,
+    bio: str = Form(None),
+    foto_perfil: UploadFile = File(None),
+    wallpaper: UploadFile = File(None)
+):
+    import cloudinary_config
+
+    db = SessionLocal()
+    user_id = request.session.get("user_id")
+    usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
+
+    if bio is not None and bio != "":
+        usuario.bio = bio
+
+    if foto_perfil and foto_perfil.filename != "":
+        resultado = cloudinary.uploader.upload(foto_perfil.file)
+        usuario.foto_url = resultado["secure_url"]
+    if wallpaper and wallpaper.filename != "":
+        resultado = cloudinary.uploader.upload(wallpaper.file)
+        usuario.fundo_url = resultado["secure_url"]
+    db.commit()
+    db.close()
+    return RedirectResponse(url="/dashboard", status_code=303)

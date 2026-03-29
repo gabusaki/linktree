@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+<body>
+    <div class="container">
+        <h1 style="margin-bottom: 24px;">Olá, @{{ username }}! 👋</h1>
+        <a href="/gerenciar/{{ user_id }}" class="link-card">Gerenciar Links</a>
+        <a href="/editar-perfil" class="link-card">Editar perfil</a>
+        <a href="/user/{{username}}" class="link-card">Ver perfil público</a>
+        <a href="/logout" class="link-card">Logout</a>
+
+    </div>
+    
+</body>
+</html>

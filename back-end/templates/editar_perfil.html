@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Editar Perfil</h1>
+            <form action="/auth/editar_perfil" method="post" enctype="multipart/form-data">
+            <input type="text" name="bio" placeholder="Bio" >
+            <input type="file" name="foto_perfil" accept="image/*" >
+            <input type="file" name="wallpaper" accept="image/*" >
+            <button type="submit">Salvar</button>
+        </form>
+    </div>
+    
+</body>
+</html>
