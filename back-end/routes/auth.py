@@ -50,6 +50,10 @@ def listar_usuarios():
     db.close()
     return lista
 
+@router.get("/login", response_class=HTMLResponse)
+def tela_login(request: Request):
+    return templates.TemplateResponse(request, "login.html")
+
 @router.post("/login")
 def login(username: str = Form(...), password: str = Form(...)):
     db = SessionLocal()
@@ -64,20 +68,19 @@ def login(username: str = Form(...), password: str = Form(...)):
 
     return f'Login deu certo! Seu ID de usuário é: {meu_id}'
 
-@router.get("/login", response_class=HTMLResponse)
-def tela_login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
-
 @router.post("/auth/login")
-def processar_login(username: str = Form(...), password:str = Form(...)):
+def processar_login(request: Request, username: str = Form(...), password: str = Form(...)):
     db = SessionLocal()
     usuario = db.query(Usuario).filter(Usuario.username == username).first()
 
     if not usuario or not verificar_senha(password, usuario.hashed_password):
         db.close()
         return "Usuário ou senha incorreta!"
+    
+    request.session["user_id"] = usuario.id
+    request.session["username"] = usuario.username
     db.close()
-    return RedirectResponse(url=f"/user/{username}", status_code=303)
+    return RedirectResponse(url=f"/gerenciar/{usuario.id}", status_code=303)
 
 @router.get("/user/{username_digitado}", response_class=HTMLResponse)
 def carregar_perfil(request: Request, username_digitado: str):
@@ -88,8 +91,7 @@ def carregar_perfil(request: Request, username_digitado: str):
         return HTMLResponse(content="<h1>Usuário não encontrado</h1>", status_code=404)
     links_do_usuario = db.query(Link).filter(Link.usuario_id == user.id).all()
     db.close()
-    return templates.TemplateResponse("perfil.html", {
-        "request": request,
+    return templates.TemplateResponse(request,"perfil.html", {
         "usuario": user.username,
         "links": links_do_usuario
     })
@@ -110,8 +112,13 @@ def cadastrar_perfil(
     db.commit()
     db.refresh(novo_user)
     db.close()
-    return RedirectResponse(url=f"/user/{username}", status_code=303)
+    return RedirectResponse(url=f"/gerenciar/{novo_user.id}", status_code=303)
 
 @router.get("/cadastro", response_class=HTMLResponse)
 def tela_cadastro(request: Request):
-    return templates.TemplateResponse("cadastro.html", {"request": request})
+    return templates.TemplateResponse(request,"cadastro.html")
+
+@router.get("/logout")
+def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse(url="/login", status_code=303)

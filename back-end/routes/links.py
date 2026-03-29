@@ -66,12 +66,13 @@ def editar_link(link_id: int, dados: LinkUpdate):
 
 @router.get("/gerenciar/{user_id}")
 def gerenciar_links(request: Request, user_id: int):
+    if not request.session.get("user_id"):
+        return RedirectResponse(url="/login", status_code=303)
     db = SessionLocal()
     usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
     links = db.query(Link).filter(Link.usuario_id == user_id).all()
     db.close()
-    return templates.TemplateResponse("gerenciar_links.html", {
-        "request": request,
+    return templates.TemplateResponse(request,"gerenciar_links.html", {
         "links": links,
         "user_id": user_id,
         "username": usuario.username

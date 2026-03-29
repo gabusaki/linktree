@@ -12,6 +12,7 @@ from pydantic import BaseModel, constr
 from passlib.context import CryptContext
 from routes.links import router as links_router
 from routes.auth import router as auth_router
+from starlette.middleware.sessions import SessionMiddleware
 
 
 base_dir = os.path.dirname(os.path.realpath(__file__))
@@ -21,6 +22,7 @@ base_dir = os.path.dirname(os.path.realpath(__file__))
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.add_middleware(SessionMiddleware, secret_key="linktree-secret-123")
 
 app.include_router(auth_router)
 app.include_router(links_router)
