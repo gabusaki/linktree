@@ -145,7 +145,7 @@ def tela_dashboard(request: Request):
 def tela_editar_perfil(request: Request):
     if not request.session.get("user_id"):
         return RedirectResponse(url="/login", status_code=303)
-        
+
     user_id = request.session.get("user_id")
     username = request.session.get("username")
     return templates.TemplateResponse(request,"editar_perfil.html", {
@@ -169,10 +169,18 @@ def editar_perfil(request: Request,
         usuario.bio = bio
 
     if foto_perfil and foto_perfil.filename != "":
-        resultado = cloudinary.uploader.upload(foto_perfil.file)
+        resultado = cloudinary.uploader.upload(
+            foto_perfil.file,
+            quality="auto:good",
+            fetch_format="auto"
+        )
         usuario.foto_url = resultado["secure_url"]
     if wallpaper and wallpaper.filename != "":
-        resultado = cloudinary.uploader.upload(wallpaper.file)
+        resultado = cloudinary.uploader.upload(
+            wallpaper.file,
+            quality="auto:good",
+            fetch_format="auto"
+        )
         usuario.fundo_url = resultado["secure_url"]
     db.commit()
     db.close()

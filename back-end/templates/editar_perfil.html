@@ -11,14 +11,34 @@
         <h1>Editar Perfil</h1>
             <form action="/auth/editar_perfil" method="post" enctype="multipart/form-data">
             <input type="text" name="bio" placeholder="Bio" >
+            <small style="color: #888;">Máximo 10MB</small>
             <label>Foto de Perfil</label>
             <input type="file" name="foto_perfil" accept="image/*" >
+            <small style="color: #888;">Máximo 10MB</small>
             <label>Wallpaper</label>
             <input type="file" name="wallpaper" accept="image/*" >
             <button type="submit">Salvar</button>
             <a href="/dashboard" style="display: block; margin-top: 16px; color: #888;">← Voltar </a>
         </form>
     </div>
-    
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const foto = document.querySelector('input[name="foto_perfil"]').files[0];
+            const wallpaper = document.querySelector('input[name="wallpaper"]').files[0];
+            const limite = 10 * 1024 * 1024; // 10MB
+
+            if (foto && foto.size > limite) {
+                e.preventDefault();
+                alert('Foto de perfil muito grande! Máximo 10MB.');
+                return;
+            }
+            
+            if (wallpaper && wallpaper.size > limite) {
+                e.preventDefault();
+                alert('Wallpaper muito grande! Máximo 10MB.');
+                return;
+            }
+        });
+    </script>
 </body>
 </html>
