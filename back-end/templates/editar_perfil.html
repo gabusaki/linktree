@@ -11,9 +11,12 @@
         <h1>Editar Perfil</h1>
             <form action="/auth/editar_perfil" method="post" enctype="multipart/form-data">
             <input type="text" name="bio" placeholder="Bio" >
+            <label>Foto de Perfil</label>
             <input type="file" name="foto_perfil" accept="image/*" >
+            <label>Wallpaper</label>
             <input type="file" name="wallpaper" accept="image/*" >
             <button type="submit">Salvar</button>
+            <a href="/dashboard" style="display: block; margin-top: 16px; color: #888;">← Voltar </a>
         </form>
     </div>
     

@@ -131,6 +131,9 @@ def logout(request: Request):
 
 @router.get("/dashboard", response_class=HTMLResponse)
 def tela_dashboard(request: Request):
+    if not request.session.get("user_id"):
+        return RedirectResponse(url="/login", status_code=303)
+
     user_id = request.session.get("user_id")
     username = request.session.get("username")
     return templates.TemplateResponse(request,"dashboard.html", {
@@ -140,6 +143,9 @@ def tela_dashboard(request: Request):
 
 @router.get("/editar-perfil", response_class=HTMLResponse)
 def tela_editar_perfil(request: Request):
+    if not request.session.get("user_id"):
+        return RedirectResponse(url="/login", status_code=303)
+        
     user_id = request.session.get("user_id")
     username = request.session.get("username")
     return templates.TemplateResponse(request,"editar_perfil.html", {

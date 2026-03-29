@@ -25,11 +25,10 @@
                 <form action="/links/deletar/{{ link.id }}" method="post">
                     <input type="hidden" name="user_id" value="{{ user_id }}">
                     <button type="submit" style="background: transparent; color: #888; border: 1px solid #333; width: auto; padding: 6px 12px; font-weight: normal;">Remover</button>
-                </form>
             </div>
             {% endfor %}
         </div>
-        
+        <a href="/dashboard" style="display: block; margin-top: 16px; color: #888;">← Voltar </a>
         <a href="/user/{{ username }}" style="display: block; margin-top: 24px; color: #888;">Ver perfil público</a>
         <a href="/logout" style="display: block; margin-top: 12px; color: #ff4444;">Sair</a>
         
