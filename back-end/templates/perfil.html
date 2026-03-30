@@ -18,6 +18,10 @@
     background-position: center;
     background-attachment: fixed;
 ">
+
+    {% if session_username == usuario %}
+        <a href="/dashboard" style="display: block; margin-top: 24px; color: #888;">✏️ Editar meu perfil</a>
+    {% endif %}
     <div class="container">
         <header class="profile">
             {% if foto_url %}
@@ -42,6 +46,26 @@
                     <i class="fa-brands fa-spotify"></i>
                 {% elif 'linkedin' in link.url.lower() %}
                     <i class="fa-brands fa-linkedin"></i>
+                {% elif 'twitch' in link.url.lower() %}
+                    <i class="fa-brands fa-twitch"></i>
+                {% elif 'tiktok' in link.url.lower() %}
+                    <i class="fa-brands fa-tiktok"></i>
+                {% elif 'youtube' in link.url.lower() %}
+                    <i class="fa-brands fa-youtube"></i>
+                {% elif 'twitter' in link.url.lower() %}
+                    <i class="fa-brands fa-x-twitter"></i>
+                {% elif 'discord' in link.url.lower() %}
+                    <i class="fa-brands fa-discord"></i>
+                {% elif 'telegram' in link.url.lower() %}
+                    <i class="fa-brands fa-telegram"></i>
+                {% elif 'whatsapp' in link.url.lower() %}
+                    <i class="fa-brands fa-whatsapp"></i>
+                {% elif 'pinterest' in link.url.lower() %}
+                    <i class="fa-brands fa-pinterest"></i>
+                {% elif 'behance' in link.url.lower() %}
+                    <i class="fa-brands fa-behance"></i>
+                {% elif 'dribbble' in link.url.lower() %}
+                    <i class="fa-brands fa-dribbble"></i>
                 {% else %}
                     <i class="fa-solid fa-link"></i> 
                 {% endif %}

@@ -97,7 +97,8 @@ def carregar_perfil(request: Request, username_digitado: str):
         "links": links_do_usuario,
         "bio": user.bio,
         "foto_url": user.foto_url,
-        "fundo_url": user.fundo_url
+        "fundo_url": user.fundo_url,
+        "session_username": request.session.get("username")
     })
 
 @router.post("/auth/cadastro")
